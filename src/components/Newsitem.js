@@ -29,13 +29,10 @@ const Newsitem = (props) => {
               {new Date(date).toGMTString()}
             </small>
           </p>
-          <a
-          href={newsUrl ? newsUrl : "#"}
-          target={newsUrl ? "_blank" : "_self"}
-          className="btn btn-sm btn-dark"
-        >
-          {newsUrl ? "Read More" : "No Link Available"}
-        </a>
+          <a href={newsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-dark">
+  Read More
+</a>
+
         </div>
       </div>
     </div>
