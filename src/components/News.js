@@ -73,7 +73,6 @@ const News = ({
   const title = element.title && element.title !== '[Removed]' ? element.title : 'Title not available';
   const description =
     element.description && element.description !== '[Removed]' ? element.description : 'Description not available';
-    const imageUrl = element.urlToImage || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKXPGqdC8U6PlNnivO43alr7RvRFoW9umR6g&s';
   const author = element.author && element.author !== '[Removed]' ? element.author : 'Unknown';
   const source = element.source?.name && element.source.name !== '[Removed]' ? element.source.name : 'Unknown';
 
