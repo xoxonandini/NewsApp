@@ -22,11 +22,20 @@ const News = ({
     setProgress(10);
     const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page}&pageSize=${pageSize}`;
     setLoading(true);
-    const response = await fetch(url);
+    
+    // Adding headers to the fetch request
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    
     setProgress(30);
     const parsedData = await response.json();
   
-    console.log('API Response:', parsedData); // Add this for debugging
+    console.log('API Response:', parsedData); // Debugging
   
     setProgress(70);
     setArticles(parsedData.articles || []);
@@ -38,23 +47,29 @@ const News = ({
   const fetchMoreData = async () => {
     const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page + 1}&pageSize=${pageSize}`;
     setPage(page + 1);
-    const response = await fetch(url);
+    
+    // Adding headers to the fetch request
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    
     const parsedData = await response.json();
   
-    console.log('Fetch More Data Response:', parsedData); // Add this for debugging
+    console.log('Fetch More Data Response:', parsedData); // Debugging
   
     setArticles((prevArticles) => [...prevArticles, ...(parsedData.articles || [])]);
     setTotalResults(parsedData.totalResults || 0);
   };
-  
 
   useEffect(() => {
     document.title = `${capitalizeFirstLetter(category)} - NewsMonkey`;
     updateNews();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
 
   return (
     <>
@@ -70,27 +85,26 @@ const News = ({
         <div className="container">
           <div className="row">
           {articles.map((element, index) => {
-  const title = element.title && element.title !== '[Removed]' ? element.title : 'Title not available';
-  const description =
-    element.description && element.description !== '[Removed]' ? element.description : 'Description not available';
-  const author = element.author && element.author !== '[Removed]' ? element.author : 'Unknown';
-  const source = element.source?.name && element.source.name !== '[Removed]' ? element.source.name : 'Unknown';
+            const title = element.title && element.title !== '[Removed]' ? element.title : 'Title not available';
+            const description =
+              element.description && element.description !== '[Removed]' ? element.description : 'Description not available';
+            const author = element.author && element.author !== '[Removed]' ? element.author : 'Unknown';
+            const source = element.source?.name && element.source.name !== '[Removed]' ? element.source.name : 'Unknown';
 
-  return (
-    <div className="col-md-4" key={element.url ? `${element.url}-${index}` : index}>
-      <NewsItem
-        title={title}
-        description={description}
-        imageUrl={element.urlToImage || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKXPGqdC8U6PlNnivO43alr7RvRFoW9umR6g&s'}
-        newsUrl={element.url || '#'}
-        author={author}
-        date={element.publishedAt || 'Date not available'}
-        source={source}
-      />
-    </div>
-  );
-})}
-
+            return (
+              <div className="col-md-4" key={element.url ? `${element.url}-${index}` : index}>
+                <NewsItem
+                  title={title}
+                  description={description}
+                  imageUrl={element.urlToImage || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKXPGqdC8U6PlNnivO43alr7RvRFoW9umR6g&s'}
+                  newsUrl={element.url || '#'}
+                  author={author}
+                  date={element.publishedAt || 'Date not available'}
+                  source={source}
+                />
+              </div>
+            );
+          })}
           </div>
         </div>
       </InfiniteScroll>
