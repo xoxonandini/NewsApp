@@ -28,7 +28,7 @@ export default class App extends Component {
 
     return (
       <div>
-        <Router basename="/NewsApp">
+        <Router basename="/">
           <Navbar />
           <LoadingBar height={2} color="red" progress={this.state.progress} />
           <Routes>
