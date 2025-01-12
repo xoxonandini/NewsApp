@@ -19,51 +19,56 @@ const News = ({
     string.charAt(0).toUpperCase() + string.slice(1);
 
   const updateNews = async () => {
-    setProgress(10);
-    const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page}&pageSize=${pageSize}`;
-    setLoading(true);
-    
-    // Adding headers to the fetch request
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    
-    setProgress(30);
-    const parsedData = await response.json();
+    try {
+      setProgress(10);
+      const url = `/api/fetch-news?country=${country}&category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page}&pageSize=${pageSize}`;
+      console.log(`Fetching URL: ${url}`);
+      
+      setLoading(true);
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      setProgress(30);
+      const parsedData = await response.json();
+      console.log('API Response:', parsedData);
   
-    console.log('API Response:', parsedData); // Debugging
-  
-    setProgress(70);
-    setArticles(parsedData.articles || []);
-    setTotalResults(parsedData.totalResults || 0);
-    setLoading(false);
-    setProgress(100);
+      setProgress(70);
+      setArticles(parsedData.articles || []);
+      setTotalResults(parsedData.totalResults || 0);
+      setLoading(false);
+      setProgress(100);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    }
   };
   
-  const fetchMoreData = async () => {
-    const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page + 1}&pageSize=${pageSize}`;
-    setPage(page + 1);
+
+    const fetchMoreData = async () => {
+      const url = `/api/fetch-news?country=${country}&category=${category}&apiKey=${process.env.REACT_APP_NEWS_API}&page=${page + 1}&pageSize=${pageSize}`;
+      console.log(`Fetching More Data URL: ${url}`);
+      
+      try {
+        setPage(page + 1);
+        const response = await fetch(url);
     
-    // Adding headers to the fetch request
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
     
-    const parsedData = await response.json();
-  
-    console.log('Fetch More Data Response:', parsedData); // Debugging
-  
-    setArticles((prevArticles) => [...prevArticles, ...(parsedData.articles || [])]);
-    setTotalResults(parsedData.totalResults || 0);
-  };
+        const parsedData = await response.json();
+        console.log('Fetch More Data Response:', parsedData);
+    
+        setArticles((prevArticles) => [...prevArticles, ...(parsedData.articles || [])]);
+        setTotalResults(parsedData.totalResults || 0);
+      } catch (error) {
+        console.error('Error fetching more data:', error);
+      }
+    };    
+    
 
   useEffect(() => {
     document.title = `${capitalizeFirstLetter(category)} - NewsMonkey`;
