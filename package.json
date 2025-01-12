@@ -1,10 +1,11 @@
 {
-  "homepage":"https://newsapx.netlify.app/",
+  "homepage": "https://newsapx.netlify.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "cra-template": "1.2.0",
     "gh-pages": "^6.3.0",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
